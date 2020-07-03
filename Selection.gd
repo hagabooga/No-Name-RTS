@@ -24,12 +24,17 @@ func _process(delta):
 	var y_scale = abs(click_end.y - click_origin.y)
 	get_node(".").scale.x = x_scale/60
 	get_node(".").scale.y = y_scale/60
-	print("x: ", x_scale)
-	print("y: ", y_scale)
+#	print("x: ", x_scale)
+#	print("y: ", y_scale)
 	get_node(".").position = lerp(click_origin, click_end, 0.5)
-
-func select_objects_in(upperleft, lowerright):
-	pass
+	select_objects_in()
+	
+func select_objects_in():
+	for x in get_overlapping_areas():
+		var selectable = x.get_parent()
+		if selectable is Selectable:
+			selectable.get_selected()
+	
 func _input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.pressed:
@@ -39,6 +44,9 @@ func _input(event):
 			#else:
 				#click_end = event.position
 		elif event.button_index == BUTTON_LEFT and !event.pressed:
+
 			holding_left_click = false
 			click_end = event.position
-			select_objects_in(click_origin, click_end)
+			select_objects_in()
+			
+
